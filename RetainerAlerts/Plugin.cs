@@ -34,8 +34,6 @@ public sealed class Plugin : IDalamudPlugin
 
     public bool shouldShowTimersText = true;
 
-    SoundPlayer player;
-
     public Plugin()
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
@@ -71,8 +69,6 @@ public sealed class Plugin : IDalamudPlugin
 
         ConfigWindow.Dispose();
         Timer.Dispose();
-        player.Stop();
-        player.Dispose();
 
         CommandManager.RemoveHandler(CommandName);
         CommandManager.RemoveHandler(CommandNameAlias);
