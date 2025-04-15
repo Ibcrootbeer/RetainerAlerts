@@ -1,0 +1,12 @@
+{
+    "Author": "Ibcrootbeer",
+    "Name": "Retainer Alerts",
+    "Punchline": "Reminds you about retainer ventures.",
+    "Description": "A simple plugin to remind you when your retainers are done with their ventures.",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "plugin",
+        "retainers",
+        "alert"
+    ]
+}
