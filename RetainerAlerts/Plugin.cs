@@ -85,7 +85,6 @@ public sealed class Plugin : IDalamudPlugin
     public void ToggleAlertMovement()
     {
         this.Configuration.IsAlertMovable = !this.Configuration.IsAlertMovable;
-        Configuration.Save();
         SetAlertWindowStatus();
     }
 
@@ -100,8 +99,8 @@ public sealed class Plugin : IDalamudPlugin
 
     public void ChangeAlertCondition(int alertWindowCondition)
     {
-        Configuration.AlertWindowCondition = alertWindowCondition;
-        Configuration.Save();
+        this.Configuration.AlertWindowCondition = alertWindowCondition;
+        this.Configuration.Save();
         SetAlertWindowStatus();
     }
 
@@ -110,7 +109,7 @@ public sealed class Plugin : IDalamudPlugin
         bool ventureCheck;
 
         // Maps to AlertWindowCondition
-        switch (Configuration.AlertWindowCondition)
+        switch (this.Configuration.AlertWindowCondition)
         {
             case 0:
                 ventureCheck = Retainer.AnyVenturesComplete();
@@ -126,7 +125,7 @@ public sealed class Plugin : IDalamudPlugin
         // TODO Add in stuff for hiding it when in cutscene?
         if (ClientState.IsLoggedIn)
         {
-            AlertWindow.IsOpen = (ventureCheck || Configuration.IsAlertMovable || shouldShowTimersText);
+            AlertWindow.IsOpen = (ventureCheck || this.Configuration.IsAlertMovable || shouldShowTimersText);
         }
         else
         {

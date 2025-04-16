@@ -12,7 +12,6 @@ public class Configuration : IPluginConfiguration
     public bool IsAlertMovable { get; set; } = false;
     public int AlertWindowCondition { get; set; } = 0;
 
-    // the below exist just to make saving less cumbersome
     public void Save()
     {
         Plugin.PluginInterface.SavePluginConfig(this);
