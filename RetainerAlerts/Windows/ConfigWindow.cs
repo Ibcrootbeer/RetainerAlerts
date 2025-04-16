@@ -10,7 +10,7 @@ public class ConfigWindow : Window, IDisposable
 {
     private Plugin plugin;
     private Configuration configuration;
-    private int whenToShowAlert;
+    private int alertWindowMethod;
 
     public ConfigWindow(Plugin plugin) : base("Retainer Alerts Configuration###RetainerAlerts")
     {
@@ -25,7 +25,7 @@ public class ConfigWindow : Window, IDisposable
 
         this.plugin = plugin;
         this.configuration = plugin.Configuration;
-        this.whenToShowAlert = configuration.WhenToShowAlert;
+        this.alertWindowMethod = (int)configuration.WhenToShowAlert;
     }
 
     public void Dispose() { }
@@ -37,9 +37,9 @@ public class ConfigWindow : Window, IDisposable
             plugin.ToggleAlertMovement();
         }
 
-        if (ImGui.Combo(string.Empty, ref whenToShowAlert, ["Show alert when any venture is completed.", "Show alert when all ventures are completed."], 2))
+        if (ImGui.Combo(string.Empty, ref alertWindowMethod, AlertWindowMethods.Methods, AlertWindowMethods.Methods.Length))
         {
-            plugin.ChangeAlertMethod(whenToShowAlert);
+            plugin.ChangeAlertMethod(alertWindowMethod);
         }
     }
 }

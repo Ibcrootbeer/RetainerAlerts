@@ -1,5 +1,4 @@
 using System;
-using System.Media;
 using System.Threading;
 using System.Timers;
 
@@ -32,8 +31,6 @@ public sealed class Plugin : IDalamudPlugin
     private static System.Timers.Timer Timer = new System.Timers.Timer(5000);
 
     public bool shouldShowTimersText = true;
-
-    public bool testThingy = true;
 
     public Plugin()
     {
@@ -106,9 +103,9 @@ public sealed class Plugin : IDalamudPlugin
         SetAlertWindowStatus();
     }
 
-    public void ChangeAlertMethod(int whenToshowAlert)
+    public void ChangeAlertMethod(int alertWindowMethod)
     {
-        Configuration.WhenToShowAlert = whenToshowAlert;
+        Configuration.WhenToShowAlert = alertWindowMethod;
         Configuration.Save();
         SetAlertWindowStatus();
     }
@@ -129,7 +126,7 @@ public sealed class Plugin : IDalamudPlugin
             default:
                 ventureCheck = Retainer.AnyVenturesComplete();
                 break;
-        }  
+        }
 
         // TODO Add in stuff for hiding it when in cutscene?
         if (ClientState.IsLoggedIn)
