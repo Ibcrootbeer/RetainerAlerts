@@ -16,7 +16,6 @@ namespace RetainerAlerts;
 public sealed class Plugin : IDalamudPlugin
 {
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
-    [PluginService] internal static ITextureProvider TextureProvider { get; private set; } = null!;
     [PluginService] internal static ICommandManager CommandManager { get; private set; } = null!;
     [PluginService] internal static IClientState ClientState { get; private set; } = null!;
 
@@ -33,6 +32,8 @@ public sealed class Plugin : IDalamudPlugin
     private static System.Timers.Timer Timer = new System.Timers.Timer(5000);
 
     public bool shouldShowTimersText = true;
+
+    public bool testThingy = true;
 
     public Plugin()
     {
@@ -87,10 +88,11 @@ public sealed class Plugin : IDalamudPlugin
     public void ToggleAlertMovement()
     {
         this.Configuration.IsAlertMovable = !this.Configuration.IsAlertMovable;
+        Configuration.Save();
         SetAlertWindowStatus();
     }
 
-    private void checkTimes(Object source, ElapsedEventArgs e)
+    private void checkTimes(Object? source, ElapsedEventArgs e)
     {
         if (Retainer.UpdateRetainers())
         {
@@ -99,11 +101,40 @@ public sealed class Plugin : IDalamudPlugin
         SetAlertWindowStatus();
     }
 
+    public void ToggleAlertMethod()
+    {
+        SetAlertWindowStatus();
+    }
+
+    public void ChangeAlertMethod(int whenToshowAlert)
+    {
+        Configuration.WhenToShowAlert = whenToshowAlert;
+        Configuration.Save();
+        SetAlertWindowStatus();
+    }
+
     private void SetAlertWindowStatus()
     {
+        bool ventureCheck;
+
+        // TODO The cases are currently tied to the order in the ImGui.Combo element. Change this to an enum.
+        switch (Configuration.WhenToShowAlert)
+        {
+            case 0:
+                ventureCheck = Retainer.AnyVenturesComplete();
+                break;
+            case 1:
+                ventureCheck = Retainer.AreAllVenturesComplete();
+                break;
+            default:
+                ventureCheck = Retainer.AnyVenturesComplete();
+                break;
+        }  
+
+        // TODO Add in stuff for hiding it when in cutscene?
         if (ClientState.IsLoggedIn)
         {
-            AlertWindow.IsOpen = (Retainer.AnyVenturesComplete() || Configuration.IsAlertMovable || shouldShowTimersText);
+            AlertWindow.IsOpen = (ventureCheck || Configuration.IsAlertMovable || shouldShowTimersText);
         }
         else
         {

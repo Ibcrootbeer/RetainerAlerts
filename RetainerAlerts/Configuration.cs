@@ -11,6 +11,11 @@ public class Configuration : IPluginConfiguration
     public bool IsConfigWindowMovable { get; set; } = true;
     public bool IsAlertMovable { get; set; } = false;
 
+    // If true the alert will show when any ventures are compelete, if false only when all ventures are complete.
+    public bool ShouldUseAnyMethod = true;
+
+    public int WhenToShowAlert { get; set; } = 0;
+
     // the below exist just to make saving less cumbersome
     public void Save()
     {
