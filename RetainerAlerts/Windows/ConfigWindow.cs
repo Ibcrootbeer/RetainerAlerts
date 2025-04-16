@@ -10,7 +10,7 @@ public class ConfigWindow : Window, IDisposable
 {
     private Plugin plugin;
     private Configuration configuration;
-    private int alertWindowMethod;
+    private int alertWindowCondition;
 
     public ConfigWindow(Plugin plugin) : base("Retainer Alerts Configuration###RetainerAlerts")
     {
@@ -25,7 +25,7 @@ public class ConfigWindow : Window, IDisposable
 
         this.plugin = plugin;
         this.configuration = plugin.Configuration;
-        this.alertWindowMethod = (int)configuration.WhenToShowAlert;
+        this.alertWindowCondition = configuration.AlertWindowCondition;
     }
 
     public void Dispose() { }
@@ -37,9 +37,9 @@ public class ConfigWindow : Window, IDisposable
             plugin.ToggleAlertMovement();
         }
 
-        if (ImGui.Combo(string.Empty, ref alertWindowMethod, AlertWindowMethods.Methods, AlertWindowMethods.Methods.Length))
+        if (ImGui.Combo(string.Empty, ref alertWindowCondition, AlertWindowCondition.Conditions, AlertWindowCondition.Conditions.Length))
         {
-            plugin.ChangeAlertMethod(alertWindowMethod);
+            plugin.ChangeAlertCondition(alertWindowCondition);
         }
     }
 }

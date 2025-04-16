@@ -98,14 +98,9 @@ public sealed class Plugin : IDalamudPlugin
         SetAlertWindowStatus();
     }
 
-    public void ToggleAlertMethod()
+    public void ChangeAlertCondition(int alertWindowCondition)
     {
-        SetAlertWindowStatus();
-    }
-
-    public void ChangeAlertMethod(int alertWindowMethod)
-    {
-        Configuration.WhenToShowAlert = alertWindowMethod;
+        Configuration.AlertWindowCondition = alertWindowCondition;
         Configuration.Save();
         SetAlertWindowStatus();
     }
@@ -114,8 +109,8 @@ public sealed class Plugin : IDalamudPlugin
     {
         bool ventureCheck;
 
-        // TODO The cases are currently tied to the order in the ImGui.Combo element. Change this to an enum.
-        switch (Configuration.WhenToShowAlert)
+        // Maps to AlertWindowCondition
+        switch (Configuration.AlertWindowCondition)
         {
             case 0:
                 ventureCheck = Retainer.AnyVenturesComplete();
