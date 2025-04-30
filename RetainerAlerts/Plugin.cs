@@ -90,7 +90,7 @@ public sealed class Plugin : IDalamudPlugin
 
     private void checkTimes(Object? source, ElapsedEventArgs e)
     {
-        if (Retainer.UpdateRetainers())
+        if (RetainerTracker.AreAnyRetainersLoaded())
         {
             shouldShowTimersText = false;
         }
@@ -112,13 +112,13 @@ public sealed class Plugin : IDalamudPlugin
         switch (this.Configuration.AlertWindowCondition)
         {
             case 0:
-                ventureCheck = Retainer.AnyVenturesComplete();
+                ventureCheck = RetainerTracker.AnyVenturesComplete();
                 break;
             case 1:
-                ventureCheck = Retainer.AreAllVenturesComplete();
+                ventureCheck = RetainerTracker.AreAllVenturesComplete();
                 break;
             default:
-                ventureCheck = Retainer.AnyVenturesComplete();
+                ventureCheck = RetainerTracker.AnyVenturesComplete();
                 break;
         }
 
