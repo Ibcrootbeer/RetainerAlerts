@@ -17,18 +17,17 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     [PluginService] internal static ICommandManager CommandManager { get; private set; } = null!;
     [PluginService] internal static IClientState ClientState { get; private set; } = null!;
+    [PluginService] internal static IFramework Framework { get; private set; } = null!;
 
     private const string CommandName = "/retaineralerts";
     private const string CommandNameAlias = "/ra";
+    private DateTime? lastUpdated;
 
     public Configuration Configuration { get; init; }
 
     public readonly WindowSystem WindowSystem = new("RetainerAlerts");
     private ConfigWindow ConfigWindow { get; init; }
     private AlertWindow AlertWindow { get; init; }
-
-    // Potentially configurable?
-    private static System.Timers.Timer Timer = new System.Timers.Timer(5000);
 
     public bool shouldShowTimersText = true;
 
@@ -54,9 +53,7 @@ public sealed class Plugin : IDalamudPlugin
         PluginInterface.UiBuilder.Draw += DrawUI;
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUI;
 
-        Timer.Elapsed += checkTimes;
-        Timer.AutoReset = true;
-        Timer.Enabled = true;
+        Framework.Update += UpdateAlertWindowStatus;
 
         SetAlertWindowStatus();
     }
@@ -66,7 +63,6 @@ public sealed class Plugin : IDalamudPlugin
         WindowSystem.RemoveAllWindows();
 
         ConfigWindow.Dispose();
-        Timer.Dispose();
 
         CommandManager.RemoveHandler(CommandName);
         CommandManager.RemoveHandler(CommandNameAlias);
@@ -88,13 +84,21 @@ public sealed class Plugin : IDalamudPlugin
         SetAlertWindowStatus();
     }
 
-    private void checkTimes(Object? source, ElapsedEventArgs e)
+    private void UpdateAlertWindowStatus(IFramework framework)
     {
-        if (RetainerTracker.AreAnyRetainersLoaded())
+        framework.Run(() =>
         {
-            shouldShowTimersText = false;
-        }
-        SetAlertWindowStatus();
+            // TODO Potentially configurable?
+            if (lastUpdated is null || lastUpdated < DateTime.Now.AddSeconds(-5))
+            {
+                lastUpdated = DateTime.Now;
+                if (RetainerTracker.AreAnyRetainersLoaded())
+                {
+                    shouldShowTimersText = false;
+                }
+                SetAlertWindowStatus();
+            }
+        });
     }
 
     public void ChangeAlertCondition(int alertWindowCondition)
