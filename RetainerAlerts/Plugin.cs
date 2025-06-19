@@ -81,6 +81,7 @@ public sealed class Plugin : IDalamudPlugin
     public void ToggleAlertMovement()
     {
         this.Configuration.IsAlertMovable = !this.Configuration.IsAlertMovable;
+        this.Configuration.Save();
         SetAlertWindowStatus();
     }
 
@@ -88,7 +89,7 @@ public sealed class Plugin : IDalamudPlugin
     {
         framework.Run(() =>
         {
-            // TODO Potentially configurable?
+            // TODO Potentially configurable refresh time?
             if (lastUpdated is null || lastUpdated < DateTime.Now.AddSeconds(-5))
             {
                 lastUpdated = DateTime.Now;
@@ -127,6 +128,7 @@ public sealed class Plugin : IDalamudPlugin
         }
 
         // TODO Add in stuff for hiding it when in cutscene?
+        // TODO Add in stuff for hiding when on a non home-world.
         if (ClientState.IsLoggedIn)
         {
             AlertWindow.IsOpen = (ventureCheck || this.Configuration.IsAlertMovable || shouldShowTimersText);
