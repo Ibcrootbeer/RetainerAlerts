@@ -4,7 +4,7 @@ using Dalamud.Interface.Windowing;
 
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace RetainerAlerts.Windows
 {
