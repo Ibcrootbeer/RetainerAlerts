@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Update this version to latest manually, it will include all needed dependencies. Don't go through Nuget. -->
-<Project Sdk="Dalamud.NET.Sdk/14.0.1">
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
   <PropertyGroup>
     <Version>1.3</Version>
     <Description>Reminds you about retainer ventures.</Description>
@@ -9,8 +9,4 @@
     <IsPackable>false</IsPackable>
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Update="DalamudPackager" Version="15.0.0" />
-    <PackageReference Update="DotNet.ReproducibleBuilds" Version="2.0.2" />
-  </ItemGroup>
 </Project>
