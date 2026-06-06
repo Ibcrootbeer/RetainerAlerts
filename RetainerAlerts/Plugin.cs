@@ -1,7 +1,6 @@
 using System;
-using System.Threading;
-using System.Timers;
 
+using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
@@ -18,6 +17,8 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static ICommandManager CommandManager { get; private set; } = null!;
     [PluginService] internal static IClientState ClientState { get; private set; } = null!;
     [PluginService] internal static IFramework Framework { get; private set; } = null!;
+
+    [PluginService] internal static IPlayerState PlayerState { get; private set; } = null!;
 
     private const string CommandName = "/retaineralerts";
     private const string CommandNameAlias = "/ra";
@@ -128,8 +129,11 @@ public sealed class Plugin : IDalamudPlugin
         }
 
         // TODO Add in stuff for hiding it when in cutscene?
-        // TODO Add in stuff for hiding when on a non home-world.
-        if (ClientState.IsLoggedIn)
+        if (PlayerState.IsLoaded && PlayerState.CurrentWorld.Value.Name != PlayerState.HomeWorld.Value.Name)
+        {
+            AlertWindow.IsOpen = false;
+        }
+        else if (PlayerState.IsLoaded)
         {
             AlertWindow.IsOpen = (ventureCheck || this.Configuration.IsAlertMovable || shouldShowTimersText);
         }
