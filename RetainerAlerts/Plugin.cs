@@ -20,6 +20,8 @@ public sealed class Plugin : IDalamudPlugin
 
     [PluginService] internal static IPlayerState PlayerState { get; private set; } = null!;
 
+    [PluginService] internal static IDutyState DutyState { get; private set; } = null!;
+
     private const string CommandName = "/retaineralerts";
     private const string CommandNameAlias = "/ra";
     private DateTime? lastUpdated;
@@ -129,7 +131,7 @@ public sealed class Plugin : IDalamudPlugin
         }
 
         // TODO Add in stuff for hiding it when in cutscene?
-        if (PlayerState.IsLoaded && PlayerState.CurrentWorld.Value.Name != PlayerState.HomeWorld.Value.Name)
+        if ((PlayerState.IsLoaded && PlayerState.CurrentWorld.Value.Name != PlayerState.HomeWorld.Value.Name) || (DutyState.IsDutyStarted))
         {
             AlertWindow.IsOpen = false;
         }
