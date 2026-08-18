@@ -17,9 +17,11 @@ Click 'Reposition Popup' again to anchor it.
 
 # Show Alert When
 Any venture is completed
+
     Will display the alert when any single retainer has a finished venture.
 
 All ventures are completed
+
     Will display the alert when ALL retainers have finished their ventures.
 
 # Alert Window Color
