@@ -18,11 +18,11 @@ Click 'Reposition Popup' again to anchor it.
 # Show Alert When
 Any venture is completed
 
-    Will display the alert when any single retainer has a finished venture.
+Will display the alert when any single retainer has a finished venture.
 
 All ventures are completed
 
-    Will display the alert when ALL retainers have finished their ventures.
+Will display the alert when ALL retainers have finished their ventures.
 
 # Alert Window Color
 These sliders can be used to change the color of the alert window. Note that the alert window will be a bright Red while it is in Reposition/Resize mode.
