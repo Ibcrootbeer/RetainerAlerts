@@ -16,11 +16,12 @@ Drag the popup around or resize it with the small tab in the bottom right.
 Click 'Reposition Popup' again to anchor it.
 
 # Show Alert When
-Any venture is completed
+
+## Any venture is completed
 
 Will display the alert when any single retainer has a finished venture.
 
-All ventures are completed
+## All ventures are completed
 
 Will display the alert when ALL retainers have finished their ventures.
 
