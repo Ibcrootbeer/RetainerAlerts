@@ -41,7 +41,7 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        ImGui.LabelText(string.Empty, "Reposition");
+        ImGui.LabelText(string.Empty, "Reposition/Resize");
         if (ImGui.Button("Reposition Popup"))
         {
             plugin.ToggleAlertMovement();
@@ -74,5 +74,11 @@ public class ConfigWindow : Window, IDisposable
         {
             plugin.SetBackgroundColor(new Vector4(ColorR, ColorG, ColorB, ColorT));
         }
+    }
+
+    public override void OnClose()
+    {
+        base.OnClose();
+        plugin.SetAlertWindowStatus();
     }
 }

@@ -1,10 +1,9 @@
 using System.Numerics;
 
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
 
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-
-using Dalamud.Bindings.ImGui;
 
 namespace RetainerAlerts.Windows
 {
@@ -23,12 +22,10 @@ namespace RetainerAlerts.Windows
         public AlertWindow(Plugin plugin, Vector4 CustomAlertWindowColor) : base("Alert Window##RetainerAlerts")
         {
             this.plugin = plugin;
-            BgAlpha = 0;
             Flags =
                 ImGuiWindowFlags.NoScrollbar |
                 ImGuiWindowFlags.NoTitleBar |
                 ImGuiWindowFlags.NoScrollWithMouse |
-                ImGuiWindowFlags.AlwaysAutoResize |
                 ImGuiWindowFlags.NoFocusOnAppearing |
                 ImGuiWindowFlags.NoDocking |
                 ImGuiWindowFlags.NoMove |
@@ -50,15 +47,19 @@ namespace RetainerAlerts.Windows
 
         public override void PreDraw()
         {
+            base.PreDraw();
+
             if (plugin.Configuration.IsAlertMovable)
             {
                 Flags &= ~ImGuiWindowFlags.NoMove;
+                Flags &= ~ImGuiWindowFlags.NoResize;
                 backGroundColor = repositionBackgroundColor;
                 alertText = repositionAlertText;
             }
             else
             {
                 Flags |= ImGuiWindowFlags.NoMove;
+                Flags |= ImGuiWindowFlags.NoResize;
                 backGroundColor = CustomBackgroundColor;
                 alertText = defaultAlertText;
             }
@@ -68,20 +69,39 @@ namespace RetainerAlerts.Windows
                 backGroundColor = repositionBackgroundColor;
                 alertText = dataAlertText;
             }
-        }
 
-        public override void Draw()
-        {
             ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f, 0f, 0f, 1f));
             ImGui.PushStyleColor(ImGuiCol.WindowBg, backGroundColor);
-            ImGui.Begin("ActualAlertWindow", this.Flags);
+        }
+
+        public override void PostDraw()
+        {
+            base.PostDraw();
+
+            ImGui.PopStyleColor(2);
+        }
+
+        // TODO I hate the hard coded reductions, but it looks so much better.
+        public override void Draw()
+        {
+            ImGui.AlignTextToFramePadding();
+            float windowWidth = ImGui.GetContentRegionAvail().X;
+            float textWidth = ImGui.CalcTextSize(alertText).X;
+            textWidth -= 15;
+            float xpos = (windowWidth - textWidth) * 0.5f;
+            ImGui.SetCursorPosX(xpos);
+
+            float windowHeight = ImGui.GetContentRegionAvail().Y;
+            float textHeight = ImGui.CalcTextSize(alertText).Y;
+            textHeight -= 5;
+            float ypos = (windowHeight - textHeight) * 0.5f;
+            ImGui.SetCursorPosY(ypos);
+
             ImGui.Text(alertText);
             if (plugin.shouldShowTimersText && ImGui.IsWindowHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
             {
                 AgentActionMenu.Instance()->UIModuleInterface->ExecuteMainCommand(5);
             }
-            ImGui.End();
-            ImGui.PopStyleColor(2);
         }
     }
 }

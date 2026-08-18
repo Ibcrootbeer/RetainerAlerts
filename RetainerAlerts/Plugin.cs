@@ -120,7 +120,7 @@ public sealed class Plugin : IDalamudPlugin
         AlertWindow.CustomBackgroundColor = color;
     }
 
-    private void SetAlertWindowStatus()
+    public void SetAlertWindowStatus()
     {
         bool ventureCheck;
 
