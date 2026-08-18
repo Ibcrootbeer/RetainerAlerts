@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 using Dalamud.Configuration;
 
@@ -11,6 +12,7 @@ public class Configuration : IPluginConfiguration
     public bool IsConfigWindowMovable { get; set; } = true;
     public bool IsAlertMovable { get; set; } = false;
     public int AlertWindowCondition { get; set; } = 0;
+    public Vector4 AlertWindowColor { get; set; } = Vector4.Zero;
 
     public void Save()
     {

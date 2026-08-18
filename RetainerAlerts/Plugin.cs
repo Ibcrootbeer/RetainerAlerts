@@ -1,6 +1,6 @@
 using System;
+using System.Numerics;
 
-using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
@@ -38,8 +38,8 @@ public sealed class Plugin : IDalamudPlugin
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
 
-        ConfigWindow = new ConfigWindow(this);
-        AlertWindow = new AlertWindow(this);
+        ConfigWindow = new ConfigWindow(this, Configuration.AlertWindowColor);
+        AlertWindow = new AlertWindow(this, Configuration.AlertWindowColor);
 
         WindowSystem.AddWindow(ConfigWindow);
         WindowSystem.AddWindow(AlertWindow);
@@ -74,6 +74,7 @@ public sealed class Plugin : IDalamudPlugin
     private void OnConfigCommand(string command, string args)
     {
         ToggleConfigUI();
+        SetAlertWindowStatus();
     }
 
     private void DrawUI() => WindowSystem.Draw();
@@ -112,6 +113,13 @@ public sealed class Plugin : IDalamudPlugin
         SetAlertWindowStatus();
     }
 
+    public void SetBackgroundColor(Vector4 color)
+    {
+        Configuration.AlertWindowColor = color;
+        Configuration.Save();
+        AlertWindow.CustomBackgroundColor = color;
+    }
+
     private void SetAlertWindowStatus()
     {
         bool ventureCheck;
@@ -137,7 +145,7 @@ public sealed class Plugin : IDalamudPlugin
         }
         else if (PlayerState.IsLoaded)
         {
-            AlertWindow.IsOpen = (ventureCheck || this.Configuration.IsAlertMovable || shouldShowTimersText);
+            AlertWindow.IsOpen = (ventureCheck || this.Configuration.IsAlertMovable || shouldShowTimersText || ConfigWindow.IsOpen);
         }
         else
         {

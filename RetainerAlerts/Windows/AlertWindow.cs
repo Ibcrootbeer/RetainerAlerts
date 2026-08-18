@@ -11,16 +11,16 @@ namespace RetainerAlerts.Windows
     internal unsafe class AlertWindow : Window
     {
         private Plugin plugin;
-        private Vector4 defaultBackgroundColor = new Vector4(.25f, .89f, .96f, 0.3f);
+        private Vector4 backGroundColor = Vector4.Zero;
+        private Vector4 defaultBackGroundColor = new Vector4(.25f, .89f, .96f, 0.3f);
+        public Vector4 CustomBackgroundColor = Vector4.Zero;
         private Vector4 repositionBackgroundColor = new Vector4(.87f, .13f, .13f, 0.8f);
         private string defaultAlertText = "Venture Completed";
         private string repositionAlertText = "Reposition Me!";
         private string dataAlertText = "Click Me Twice";
-
-        private Vector4 backgroundColor = new Vector4(.25f, .89f, .96f, 0.3f);
         private string alertText = "Venture Completed";
 
-        public AlertWindow(Plugin plugin) : base("Alert Window##RetainerAlerts")
+        public AlertWindow(Plugin plugin, Vector4 CustomAlertWindowColor) : base("Alert Window##RetainerAlerts")
         {
             this.plugin = plugin;
             BgAlpha = 0;
@@ -36,6 +36,16 @@ namespace RetainerAlerts.Windows
                 ImGuiWindowFlags.NoNavFocus;
             AllowClickthrough = true;
             RespectCloseHotkey = false;
+
+            if (CustomAlertWindowColor != Vector4.Zero)
+            {
+                CustomBackgroundColor = CustomAlertWindowColor;
+                backGroundColor = CustomBackgroundColor;
+            }
+            else
+            {
+                CustomBackgroundColor = defaultBackGroundColor;
+            }
         }
 
         public override void PreDraw()
@@ -43,19 +53,19 @@ namespace RetainerAlerts.Windows
             if (plugin.Configuration.IsAlertMovable)
             {
                 Flags &= ~ImGuiWindowFlags.NoMove;
-                backgroundColor = repositionBackgroundColor;
+                backGroundColor = repositionBackgroundColor;
                 alertText = repositionAlertText;
             }
             else
             {
                 Flags |= ImGuiWindowFlags.NoMove;
-                backgroundColor = defaultBackgroundColor;
+                backGroundColor = CustomBackgroundColor;
                 alertText = defaultAlertText;
             }
 
             if (plugin.shouldShowTimersText)
             {
-                backgroundColor = repositionBackgroundColor;
+                backGroundColor = repositionBackgroundColor;
                 alertText = dataAlertText;
             }
         }
@@ -63,7 +73,7 @@ namespace RetainerAlerts.Windows
         public override void Draw()
         {
             ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(1f, 0f, 0f, 1f));
-            ImGui.PushStyleColor(ImGuiCol.WindowBg, backgroundColor);
+            ImGui.PushStyleColor(ImGuiCol.WindowBg, backGroundColor);
             ImGui.Begin("ActualAlertWindow", this.Flags);
             ImGui.Text(alertText);
             if (plugin.shouldShowTimersText && ImGui.IsWindowHovered() && ImGui.IsMouseReleased(ImGuiMouseButton.Left))
