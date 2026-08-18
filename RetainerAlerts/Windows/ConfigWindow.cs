@@ -41,7 +41,7 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        ImGui.LabelText(string.Empty, "Reposition/Resize");
+        ImGui.LabelText(string.Empty, "Reposition/Resize (Click again to anchor)");
         if (ImGui.Button("Reposition Popup"))
         {
             plugin.ToggleAlertMovement();
